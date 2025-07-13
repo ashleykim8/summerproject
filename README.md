@@ -1,70 +1,50 @@
-# Getting Started with Create React App
+### Prep-Time: Your Personal Flashcard System
+Prep-Time is a dynamic and intuitive web application designed to help users create, manage, and review their own custom flashcard sets. Whether you're studying for an exam, learning a new language, or just organizing information, Prep-Time provides a streamlined experience for effective learning.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
+This application functions as a comprehensive flashcard system, enabling users to:
+- Create and manage multiple flashcard sets.
+- Add, edit, and delete individual flashcards within any given set.
+- Save and review sets at their convenience, fostering continuous learning.
 
-## Available Scripts
+The application leverages React for a responsive and interactive frontend, with React Router DOM handling seamless navigation between different sections of the application.
 
-In the project directory, you can run:
+# Architecture and Structure
+The Prep-Time application is built around two primary React components, ensuring a clear separation of concerns and maintainability:
 
-### `npm start`
+FlashcardSets Component:
+- This serves as the main entry point for managing flashcard collections.
+- Users can create new flashcard sets and view a list of all existing sets here.
+- It acts as the central hub for set-level operations.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Flashcards Component:
+- This component is dedicated to the detailed management of flashcards within a specific set.
+- Users navigate to this page to add new flashcards, or to edit and delete existing ones.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# How It Works: A User Flow
+- Homepage Access: From the navigation bar, users can click "Flashcard Sets" to access the main set management page.
+- Set Creation: On the FlashcardSets page, users can type a desired name into an input field and click "Add Set" to create a new flashcard collection. The input field then resets.
+- Navigating to a Set: Each created set is displayed as a clickable item. Clicking on a set's visual representation navigates the user to the Flashcards page, using the set's unique ID embedded in the URL.
 
-### `npm test`
+# Flashcard Management (within Flashcards Component):
+- Adding Flashcards: Users can input a question and an answer into designated fields. Clicking "Add Flashcard" saves this new flashcard to the currently active set.
+- Editing Flashcards: Clicking "Edit" on an existing flashcard populates the input fields with its current question and answer. After making changes, clicking "Update Flashcard" saves these modifications.
+- Deleting Flashcards: A "Delete" button allows users to remove individual flashcards from the set.
+- Saving and Reviewing: Once done managing flashcards, users can click "Review Set." This action sends the current set's data to a server (via a POST request) for persistence and then navigates the user to a dedicated review page.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Key React Features & Implementation Details
+State Management with useState:
+- The application extensively uses the useState hook to manage dynamic data, including the comprehensive list of flashcardSets, the name of a new set being created (setName), input values for flashcard questions/answers, and the edit states of individual flashcards.
+- When a new set is added, it's pushed into the flashcardSets array with a unique ID and an initially empty list for its flashcards.
+  
+Dynamic Routing with react-router-dom:
+- The useNavigate hook is employed to programmatically navigate users between different pages (e.g., from FlashcardSets to Flashcards).
+- The useParams hook is utilized to extract URL parameters, such as the setID, which is crucial for fetching and displaying the correct flashcard set on the Flashcards page.
 
-### `npm run build`
+Component Props for Data Flow:
+- Data is efficiently passed from parent components to child components using props.
+- For instance, the FlashcardSets component receives flashcardSets (the array of all sets) and setFlashcardSets (the state update function) as props from App.js. This allows FlashcardSets to both access the global list of sets and trigger updates to that list when new sets are added.
+- The setFlashcardSets function, passed down as a prop, ensures that any additions, edits, or deletions of flashcards or sets are reflected globally across the application's state, maintaining data consistency.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Design Rationale
+- The architectural decision to divide the application into distinct FlashcardSets and Flashcards components, coupled with a centralized state management in the parent App.js, significantly enhances the application's maintainability and scalability. This modular approach makes it easier to debug, add new features, and understand the flow of data within the application.
